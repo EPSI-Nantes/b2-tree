@@ -1,0 +1,93 @@
+body{
+	margin:0;
+        width:100%;
+}
+
+circle{
+  fill:#007acc;
+  stroke:steelblue;  
+  stroke-width:2px;
+}
+
+line{
+  stroke:grey;
+  stroke-width:3px;
+}
+
+#treesvg g text:hover, #treesvg g circle:hover{
+	cursor:pointer;
+}
+
+#treesvg line {
+    stroke:#fff;
+}
+
+#treesvg{
+	border:1px solid grey;
+    background-color: #28282b;
+    height: 75%;
+    width:100%;
+}
+
+#labelpos{
+	color:white;
+}
+
+#g_labels text{
+	text-anchor:middle;
+}
+
+#g_elabels text{
+	text-anchor:middle;
+	fill:red;
+	font-weight:bold;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+#title {
+    position: absolute;
+    color:#fff;
+    font-size:2em;
+    font-family: "Consolas";
+    width:100%;
+    text-align:center;
+    z-index: 10000;
+    font-weight: bold;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#menu {
+    width:100px;
+    background-color:#68217a;
+    position:absolute;
+    font-family: Calibri;
+    font-size: 1.1em;
+}
+
+#menu ul {
+    padding:0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#menu ul li {
+	padding: 2px;
+    list-style:none;
+    color:white;
+    border-bottom: 1px solid #888;
+    text-align:center;
+}
+
+#menu ul li:hover {
+    background-color:#9f66ae;
+    cursor: pointer;
+}

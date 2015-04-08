@@ -1,0 +1,69 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16 mars 2015, 09:42:14
+    Author     : Raphaël
+*/
+body {
+    margin:0;
+    background-color:#252526;
+}
+
+#title {
+    position: absolute;
+    color:#fff;
+    font-size:2em;
+    font-family: "Consolas";
+    width:100%;
+    text-align:center;
+    z-index: 10000;
+    font-weight: bold;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#container {
+    width:100%;
+    height:80%;
+    background-color:#28282b;
+    border-bottom: 1px solid #fff;
+}
+
+#menu {
+    width:100px;
+    background-color:#1b1b1c;
+    position:absolute;
+    border-radius:5px;
+    font-family: Calibri;
+}
+
+#menu ul {
+    padding:0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#menu ul li {
+    list-style:none;
+    color:white;
+    border-bottom: 1px solid #888;
+    text-align:center;
+}
+
+#menu ul li:hover {
+    background-color:#333334;
+    cursor: pointer;
+}
+
+#edit {
+    color:#fff;
+    font-family: "Consolas";
+    margin:10px;
+}
