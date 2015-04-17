@@ -29,7 +29,7 @@ function tree(){
 
         tree.addLeaf = function(_){
                 function addLeaf(t){
-                        if(t.v==_){ t.c.push({v:tree.size++, l:'Question non définie', p:{},c:[]}); return; }
+                        if(t.v==_){ t.c.push({v:tree.size++, l:'Question non définie', r:'Réponse non définie', p:{},c:[]}); return; }
                         t.c.forEach(addLeaf);
                 }
                 addLeaf(tree.vis);
@@ -170,7 +170,7 @@ function tree(){
                 circles.transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
 
                 circles.enter().append('circle').attr('cx',function(d){ return d.f.p.x;}).attr('cy',function(d){ return d.f.p.y;}).attr('r',vRad)
-                        .on('click',function(d){ return showMenu(d.v); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
+                        .on('click',function(d){ return clickNode(d); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
                         
                 circles.on('mouseover', function(){d3.select(this).style({fill:'#fff'});})
                         .on('mouseout', function(){d3.select(this).style({fill:'steelblue'});});
@@ -318,15 +318,54 @@ $('#menu').click(function(){
   $('#menu').fadeOut('slow');
 });
 
-function showMenu(id) {
-    clickedNode = id;
-    $('#menu').css({'top':mouseY-10,'left':mouseX-10}).fadeIn('slow');
-}
-
 function AddNode() {
     tree.addLeaf(clickedNode);
 }
 
 function DeleteNode() {
     tree.deleteLeaf(clickedNode);
+}
+
+
+function clickNode(node) {
+    updateInfos(node);
+    showMenu(node.v);
+}
+
+function updateInfos(node) {
+    $("#question").text(node.l);
+
+    var realNode = findNodeById(node.v);
+
+    $('#reponses').text('');
+    realNode.c.forEach(function(truc, i){
+        $('#reponses').append(i+' - '+truc.r +'<br/>');
+    });
+}
+
+function showMenu(id) {
+    clickedNode = id;
+    $('#menu').css({'top':mouseY-10,'left':mouseX-10}).fadeIn('slow');
+}
+
+function findNodeById(id) {
+    var nodeToReturn;
+
+    function traverse(o, myFather) {
+                for (var i in o) {
+
+                    if(i=='v' && o[i]==id) {
+                        nodeToReturn = o;
+                    }
+
+                    if (o[i] !== null && typeof(o[i])=="object") {
+                        //going on step down in the object tree!!
+                        traverse(o[i], o);
+                    }
+                }
+            }
+
+            traverse(tree.vis, tree.vis);
+
+    return nodeToReturn;
 }

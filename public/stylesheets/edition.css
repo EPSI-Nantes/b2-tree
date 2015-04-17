@@ -91,3 +91,20 @@ line{
     background-color:#9f66ae;
     cursor: pointer;
 }
+
+#btn-save {
+    position:absolute;
+    right:1;
+    margin-top: -34px;
+    border-radius:0;
+}
+
+#infos {
+    background-color: #3e3e42;
+    height: 25%;
+    width:100%;
+    color:#fff;
+    font-family: "Consolas";
+    font-size: 1.5em;
+    padding-left: 10px;
+}
