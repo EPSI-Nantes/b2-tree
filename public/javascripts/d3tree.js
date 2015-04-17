@@ -29,7 +29,7 @@ function tree(){
 
         tree.addLeaf = function(_){
                 function addLeaf(t){
-                        if(t.v==_){ t.c.push({v:tree.size++, l:'', p:{},c:[]}); return; }
+                        if(t.v==_){ t.c.push({v:tree.size++, l:'Question non définie', p:{},c:[]}); return; }
                         t.c.forEach(addLeaf);
                 }
                 addLeaf(tree.vis);
@@ -49,17 +49,37 @@ function tree(){
                 redraw();
         }
 
-        tree.deleteLeaf = function (_) {
-            function deleteLeaf(t){
-                if(t.v==_){ 
-                    var index = tree.vis.indexOf(t);
-                    tree.vis.slice(index, 1);
-                    return; 
+        tree.deleteLeaf = function (nodeToDelete) {
+/*
+            function process(key,value) {
+                if(key=='v' && value==_) {
+                    console.log('ICIIIIIIIIIIIIIIIIIIII');
+                    console.log(this);
                 }
-                t.c.forEach(deleteLeaf);
-            }
-            deleteLeaf(tree.vis);
 
+                console.log(key + " : "+value);
+                
+            }*/
+
+
+            function traverse(o, myFather) {
+                for (var i in o) {
+                    if(i=='v' && o[i]==nodeToDelete) {
+                        var index = myFather.indexOf(o);
+                        myFather.splice(index,1);
+                    }
+
+                    if (o[i] !== null && typeof(o[i])=="object") {
+                        //going on step down in the object tree!!
+                        traverse(o[i], o);
+                    }
+                }
+            }
+
+            traverse(tree.vis, tree.vis);
+
+            reposition(tree.vis);
+            redraw();
         }
 /*
         tree.gracefulLabels = function(){
@@ -128,7 +148,10 @@ function tree(){
         }
 */
         redraw = function(){
+         
                 var edges = d3.select("#g_lines").selectAll('line').data(tree.getEdges());
+
+                edges.exit().transition().duration(0).remove();
 
                 edges.transition().duration(500)
                         .attr('x1',function(d){ return d.p1.x;}).attr('y1',function(d){ return d.p1.y;})
@@ -142,6 +165,8 @@ function tree(){
 
                 var circles = d3.select("#g_circles").selectAll('circle').data(tree.getVertices());
 
+                circles.exit().transition().duration(500).attr("r", 0).remove();
+
                 circles.transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
 
                 circles.enter().append('circle').attr('cx',function(d){ return d.f.p.x;}).attr('cy',function(d){ return d.f.p.y;}).attr('r',vRad)
@@ -150,6 +175,7 @@ function tree(){
                 circles.on('mouseover', function(){d3.select(this).style({fill:'#fff'});})
                         .on('mouseout', function(){d3.select(this).style({fill:'steelblue'});});
 
+                /*
                 var labels = d3.select("#g_labels").selectAll('text').data(tree.getVertices());
 
                 labels.text(function(d){return d.l;}).transition().duration(500)
@@ -159,6 +185,7 @@ function tree(){
                         .text(function(d){return d.l;}).on('click',function(d){return tree.addLeaf(d.v);})
                         .transition().duration(500)
                         .attr('x',function(d){ return d.p.x;}).attr('y',function(d){ return d.p.y+5;});		
+                */
 
                 /* LABELS SUR LES LIGNES
                 var elabels = d3.select("#g_elabels").selectAll('text').data(tree.getEdges());
@@ -265,7 +292,7 @@ function tree(){
 
       initialize();
 
-        return tree;
+    return tree;
 }
 var tree= tree();
 
