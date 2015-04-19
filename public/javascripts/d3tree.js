@@ -170,10 +170,11 @@ function tree(){
                 circles.transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
 
                 circles.enter().append('circle').attr('cx',function(d){ return d.f.p.x;}).attr('cy',function(d){ return d.f.p.y;}).attr('r',vRad)
-                        .on('click',function(d){ return clickNode(d); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
-                        
+                        .on('click',function(d){ d3.selectAll("circle").style("fill", "steelblue"); d3.select(this).style("fill", "white"); return clickNode(d); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
+                
+                /*
                 circles.on('mouseover', function(){d3.select(this).style({fill:'#fff'});})
-                        .on('mouseout', function(){d3.select(this).style({fill:'steelblue'});});
+                        .on('mouseout', function(){d3.select(this).style({fill:'steelblue'});});*/
 
                 /*
                 var labels = d3.select("#g_labels").selectAll('text').data(tree.getVertices());
@@ -301,6 +302,7 @@ var mouseX;
 var mouseY;
 
 var clickedNode;
+var clickedNodeReal;
 
 $(document).mousemove( function(e) {
    mouseX = e.pageX; 
@@ -320,26 +322,32 @@ $('#menu').click(function(){
 
 function AddNode() {
     tree.addLeaf(clickedNode);
+    updateInfos(clickedNodeReal);
 }
 
 function DeleteNode() {
     tree.deleteLeaf(clickedNode);
+    // TODO CLEAR BOTTOM
 }
 
 
 function clickNode(node) {
     updateInfos(node);
-    showMenu(node.v);
+
+    // Precise the node to edit
+    clickedNode = node.v;
+    clickedNodeReal = findNodeById(clickedNode);
+    //showMenu(node.v);
 }
 
 function updateInfos(node) {
-    $("#question").text(node.l);
-
     var realNode = findNodeById(node.v);
+
+    $("#question").html(realNode.l);
 
     $('#reponses').text('');
     realNode.c.forEach(function(truc, i){
-        $('#reponses').append(i+' - '+truc.r +'<br/>');
+        $('#reponses').append(i+' - <a href="#" id="'+truc.v+'" data-type="text"  data-name="field'+truc.v+'" title="Definir la réponse" class="editable-click editable-empty">'+truc.r +'</a><br/>');
     });
 }
 
@@ -354,14 +362,11 @@ function findNodeById(id) {
     function traverse(o, myFather) {
                 for (var i in o) {
 
-                    if(i=='v' && o[i]==id) {
+                    if(i=='v' && o[i]==id)
                         nodeToReturn = o;
-                    }
 
-                    if (o[i] !== null && typeof(o[i])=="object") {
-                        //going on step down in the object tree!!
-                        traverse(o[i], o);
-                    }
+                    if (o[i] !== null && typeof(o[i])=="object")
+                        traverse(o[i], o);                    
                 }
             }
 
@@ -369,3 +374,29 @@ function findNodeById(id) {
 
     return nodeToReturn;
 }
+
+
+$(document).ready(function() {
+    $('#question').editable({
+        defaultValue: '',
+        emptytext: 'Question non définie',
+        success: function(response, newValue) {
+           // userModel.set('username', newValue); //update backbone mode
+            //var theNode = findNodeById(clickedNode);
+            clickedNodeReal.l = newValue;
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    $('#reponses').editable({
+      selector: 'a',
+      emptytext: 'Réponse non définie',
+      url: '',
+        success: function(response, newValue) {
+                   var answerNode = findNodeById($(this).attr('id'));
+                   answerNode.r = newValue;
+                }
+    });
+});

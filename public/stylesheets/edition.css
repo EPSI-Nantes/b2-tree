@@ -4,7 +4,7 @@ body{
 }
 
 circle{
-  fill:#007acc;
+  fill:steelblue;
   stroke:steelblue;  
   stroke-width:2px;
 }
@@ -65,6 +65,12 @@ line{
     user-select: none;
 }
 
+#newMenu {
+    position:fixed;
+    right: 10px;
+    bottom: 10px;
+}
+
 #menu {
     width:100px;
     background-color:#68217a;
@@ -107,4 +113,8 @@ line{
     font-family: "Consolas";
     font-size: 1.5em;
     padding-left: 10px;
+}
+
+.popover-title {
+    color:#000;
 }

@@ -1,4 +1,9 @@
 function SaveTree() {
+    $("#btn-save").text("Saved !");
+    window.setTimeout(function () {
+        $("#btn-save").html("<span class='glyphicon glyphicon-ok'></span>&nbsp Save");
+    },2000);
+
     function traverse(o, myFather) {
 
             // o['v'] => ID
