@@ -29,7 +29,7 @@ function tree(){
 
         tree.addLeaf = function(_){
                 function addLeaf(t){
-                        if(t.v==_){ t.c.push({v:tree.size++, l:'Question non définie', r:'Réponse non définie', p:{},c:[]}); return; }
+                        if(t.v==_){ t.c.push({v:tree.size++, l:'Question non définie', r:'Réponse non définie', e:t.v, p:{},c:[]}); return; }
                         t.c.forEach(addLeaf);
                 }
                 addLeaf(tree.vis);
@@ -328,8 +328,16 @@ function AddNode() {
 function DeleteNode() {
     tree.deleteLeaf(clickedNode);
     // TODO CLEAR BOTTOM
+    $("#question").html("");
+    $('#reponses').html("");
+    d3.selectAll("circle").style("fill", "steelblue");
 }
 
+/*
+function EndPoint() {
+    clickedNodeReal.e = !clickedNodeReal.e;
+}
+*/
 
 function clickNode(node) {
     updateInfos(node);

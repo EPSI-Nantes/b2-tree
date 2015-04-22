@@ -57,5 +57,33 @@ app.use(function(err, req, res, next) {
   });
 });
 
+/*
+var http = require('http');
+
+var options = {
+  host: 'http://localhost/',
+  port: '3000',
+  path: '/savetree',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Length': post_data.length
+  }
+};
+
+var req = http.request(options, function(res) {
+  // response is here
+});
+
+// write the request parameters
+req.write('post=data&is=specified&like=this');
+req.end();
+*/
+
+
+app.post('/savetree', function(req, res) {
+  res.redirect('/edition');
+});
+
 
 module.exports = app;

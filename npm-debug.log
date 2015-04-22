@@ -1,0 +1,35 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'start' ]
+2 info using npm@2.7.4
+3 info using node@v0.12.2
+4 verbose node symlink D:\Program Files\nodejs\\node.exe
+5 verbose stack Error: Failed to parse json
+5 verbose stack Unexpected token '\n' at 18:27
+5 verbose stack     "node-mysql": "^0.4.2
+5 verbose stack                          ^
+5 verbose stack     at parseError (D:\Program Files\nodejs\node_modules\npm\node_modules\read-package-json\read-json.js:406:25)
+5 verbose stack     at parseJson (D:\Program Files\nodejs\node_modules\npm\node_modules\read-package-json\read-json.js:86:51)
+5 verbose stack     at D:\Program Files\nodejs\node_modules\npm\node_modules\read-package-json\read-json.js:60:33
+5 verbose stack     at evalmachine.<anonymous>:334:14
+5 verbose stack     at D:\Program Files\nodejs\node_modules\npm\node_modules\graceful-fs\graceful-fs.js:102:5
+5 verbose stack     at FSReqWrap.oncomplete (evalmachine.<anonymous>:95:15)
+6 verbose cwd D:\wamp\www\b2-tree
+7 error Windows_NT 6.3.9600
+8 error argv "D:\\Program Files\\nodejs\\\\node.exe" "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
+9 error node v0.12.2
+10 error npm  v2.7.4
+11 error file D:\wamp\www\b2-tree\package.json
+12 error code EJSONPARSE
+13 error Failed to parse json
+13 error Unexpected token '\n' at 18:27
+13 error     "node-mysql": "^0.4.2
+13 error                          ^
+14 error File: D:\wamp\www\b2-tree\package.json
+15 error Failed to parse package.json data.
+15 error package.json must be actual JSON, not just JavaScript.
+15 error
+15 error This is not a bug in npm.
+15 error Tell the package author to fix their package.json file. JSON.parse
+16 verbose exit [ 1, true ]
