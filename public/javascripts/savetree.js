@@ -53,10 +53,9 @@ function traverse(o) {
 //connection.end();
 
 $.ajax({
-        url: 'http://localhost:3000',
+        url: 'http://localhost:3000/savetree',
         data: tree.vis,
         type: 'POST',
-        url: '/savetree',
         success: function(response, code, xhr) {
             console.log('success');
         },
