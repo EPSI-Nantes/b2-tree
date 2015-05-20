@@ -1,7 +1,7 @@
 function tree(){
         var svgW=2000, svgH =460, vRad=12, tree={cx:screen.width/2, cy:80, w:40, h:70};
-        tree.vis={v:0, l:'', p:{x:tree.cx, y:tree.cy},c:[]};	
-        tree.size=1;
+        tree.vis={v:1, l:'Question non définie', r:'Réponse non définie', e:'0', p:{x:tree.cx, y:tree.cy},c:[]};	
+        tree.size=2;
         tree.glabels =[];
         var base;
 
@@ -118,10 +118,14 @@ function tree(){
                         .append('circle').attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;}).attr('r',vRad)
                         .on('click',function(d){return tree.addLeaf(d.v);})
 
+                /*
                 base.append('g').attr('id','g_labels').selectAll('text').data(tree.getVertices()).enter().append('text')
                         .attr('x',function(d){ return d.p.x;}).attr('y',function(d){ return d.p.y+5;}).text(function(d){return d.l;})
-                        .on('click',function(d){return tree.addLeaf(d.v);});	                tree.addLeaf(0);
-                tree.addLeaf(0);
+                        .on('click',function(d){return tree.addLeaf(d.v);});	  
+                */              
+
+                tree.addLeaf(1);
+                tree.addLeaf(1);
         }
 
         function zoom() {
