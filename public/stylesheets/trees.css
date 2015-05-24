@@ -1,0 +1,43 @@
+body {
+	background-color: #28282b !important;
+}
+
+h1 {
+	color:#FFF !important;
+}
+
+.box {
+	vertical-align:top;
+	display:inline-block;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 10px;
+	text-align:center;
+	background-color: #FFF;
+	width:180px;
+	margin: 15px;
+}
+
+.run {
+	width:100%;
+	margin-bottom: 5px !important;
+}
+
+#add {
+	cursor: pointer;
+	font-size: 90px;
+
+	-webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+      -ms-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+
+#add:hover {
+  -webkit-transform: rotate(-10deg);
+     -moz-transform: rotate(-10deg);
+       -o-transform: rotate(-10deg);
+      -ms-transform: rotate(-10deg);
+          transform: rotate(-10deg);
+}

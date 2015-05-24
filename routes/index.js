@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
@@ -15,39 +16,93 @@ router.get('/', function(req, res, next) {
 
 /* GET Hello World page. */
 router.get('/helloworld', function(req, res) {
-    res.render('helloworld', { title: 'Hello, World!' })
+    res.render('helloworld', { title: 'Hello, World!' });
 });
 
+/* GET List of trees created */
+router.get('/trees', function(req, res) {
+  connection.query('SELECT * FROM trees', function(err, rows, fields) {
+    if (!err) {
+      console.log(rows);
+      res.render('trees', {trees: rows});
+    }
+    else
+      console.log("Error while retrieving created trees !");
+
+  });
+});
 
 router.get('/edition', function(req, res) {
-    res.render('edition')
+    res.render('edition');
 });
 
+/* GET Edit a specific tree */
+router.get('/edition/:id', function(req, res) {
+  var id = req.params.id;
+  var sql = 'SELECT * FROM node WHERE idTree=?'
+  var inserts = [id];
+  sql = mysql.format(sql, inserts);
+
+  connection.query(sql, function(err, rows, fields) {
+    if (!err) {
+      res.render('edition', {nodes: JSON.stringify(rows), idTree: id});
+      console.log("Sucess rendering saved tree");
+      console.log(sql);
+      console.log(rows);
+    }
+    else
+      console.log('Fail rendering saved tree');
+    });
+});
+
+/* GET Run a specific tree */
+router.get('/parcours/:id', function(req, res) {
+  var id = req.params.id;
+  var sql = 'SELECT * FROM node WHERE idTree=?'
+  var inserts = [id];
+  sql = mysql.format(sql, inserts);
+
+  connection.query(sql, function(err, rows, fields) {
+    if (!err) {
+      res.render('parcours', {nodes: JSON.stringify(rows)});
+      console.log("Sucess rendering saved tree");
+      console.log(sql);
+      console.log(rows);
+    }
+    else
+      console.log('Fail rendering saved tree :', err);
+
+    });
+});
+
+/* SAVE Tree in database with its nodes */
 router.post('/savetree',function(req,res){
   console.log('req.body:', req.body);
 
-  treeToSave = req.body;
+  var treeToSave = req.body.tree;
+  var idTreeToSave = req.body.id;
 
-  //connection.connect();
+      // Delete Old Nodes
+      var sql = 'DELETE FROM node WHERE idTree=?';
+      var inserts = [idTreeToSave];
+      sql = mysql.format(sql, inserts);
 
-  // Insert new tree
-  connection.query('INSERT INTO trees (name, url) VALUES ("test1", "urlol")', function(err, rows, fields) {
-    if (!err) {
-      console.log('The solution is: ', rows);
-      console.log('INSERTED ROW ID is :', rows.insertId);
-
-      // Insert Nodes
-      fullNodeSaving(treeToSave, rows.insertId);
+      connection.query(sql, function(err, rows, fields) {
+        if(!err) {
+          console.log('Deleted nodes with tree id:', idTreeToSave);
+        
+        // Replace by inserting new nodes
+        fullNodeSaving(treeToSave, idTreeToSave);
+        }
+        else
+          console.log('Error while trying to delete nodes:', err);
+      });
 
 
       res.writeHead(200, {"Content-Type": "text/plain"});
       res.end("Saving done");
-    }
-    else
-      console.log('Error while performing Query :', err);
-  });
 
-//connection.end();
+
 });
 
 
@@ -72,6 +127,79 @@ function fullNodeSaving(o, treeID) {
         }
     }
 }
+
+
+router.post('/deletetree', function(req, res) {
+  var treeIdToDelete = req.body.id;
+  console.log(treeIdToDelete);
+
+  var sql = 'DELETE FROM node WHERE idTree=?';
+  var inserts = [treeIdToDelete];
+  sql = mysql.format(sql, inserts);
+
+  connection.query(sql, function(err, rows, fields) {
+    if(!err)
+      console.log('Deleted nodes with tree id:', treeIdToDelete);
+    else
+      console.log('Error while trying to delete nodes:', err);
+  });
+
+  sql = 'DELETE FROM trees WHERE id=?'
+  sql = mysql.format(sql, inserts);
+
+  connection.query(sql, function(err, rows, fields) {
+    if(!err)
+      console.log('Deleted tree id:', treeIdToDelete);
+    else
+      console.log('Error while trying to tree:', err);
+  });
+
+});
+
+router.post('/addtree', function(req, res) {
+  var name = req.body.name;
+
+  var sql = "INSERT INTO trees(name) VALUES (?)";
+  var inserts = [name];
+   sql = mysql.format(sql, inserts);
+   var insId;
+
+  connection.query(sql, function(err, rows, fields) {
+    if(!err) {
+      console.log('Added tree name:', name);
+      insId = rows.insertId;
+      console.log("INSID1:", rows.insertId);
+
+      sql = 'INSERT INTO node (idTree, idNode, question, answer, idParent) VALUES (?, ?, ?, ?, ?)';
+      inserts = [rows.insertId, 1, "Question non définie", "Réponse non définie", 0];
+      sql = mysql.format(sql, inserts);
+
+      connection.query(sql, function(err, rows, fields) {
+        if(!err)
+          console.log('Added default node');
+        else
+          console.log('Error while trying to add default node:', err);
+      });
+
+    }
+    else
+      console.log('Error while trying to add tree:', err);
+  });
+
+/*
+  sql = 'INSERT INTO node (idTree, idNode, question, answer, idParent) VALUES (?, ?, ?, ?, ?)';
+  inserts = [insId, 1, "Question non définie", "Réponse non définie", 0];
+  sql = mysql.format(sql, inserts);
+
+  connection.query(sql, function(err, rows, fields) {
+    if(!err)
+      console.log('Added default node');
+    else
+      console.log('Error while trying to add default node:', err);
+  });
+*/
+
+});
 
 module.exports = router;
 /*

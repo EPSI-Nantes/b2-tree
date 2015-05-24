@@ -1,3 +1,4 @@
+
 var actualSize = 1;
 var treeCopy = FindByParentId(0)[0];
 console.log(treeCopy);
@@ -27,7 +28,7 @@ function tree(){
         var svgW=2000, svgH =460, vRad=12, tree={cx:screen.width/2, cy:80, w:40, h:70};
         treeCopy.p = {x:tree.cx, y:tree.cy};
         tree.vis=treeCopy;	
-        tree.size=actualSize+1;
+        tree.size=actualSize + 1;
         tree.glabels =[];
         var base;
 
@@ -93,6 +94,7 @@ function tree(){
             redraw();
         }
 
+
         redraw = function(){
          
                 var edges = d3.select("#g_lines").selectAll('line').data(tree.getEdges());
@@ -116,7 +118,7 @@ function tree(){
                 circles.transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
 
                 circles.enter().append('circle').attr('cx',function(d){ return d.f.p.x;}).attr('cy',function(d){ return d.f.p.y;}).attr('r',vRad)
-                        .on('click',function(d){ d3.selectAll("circle").style("fill", "steelblue"); d3.select(this).style("fill", "white"); console.log(this); return clickNode(d); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
+                        .on('click',function(d){ d3.selectAll("circle").style("fill", "steelblue"); d3.select(this).style("fill", "white"); return clickNode(d); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
                
         }
 
@@ -136,9 +138,12 @@ function tree(){
         }	
 
         initialize = function(){
+
+                var p0 = [tree.vis.p.x, tree.vis.p.y, 60],
+                p1 = [1000, 100, 60];
            
                 base = d3.select("body").append("svg").attr("width", svgW).attr("height", svgH).attr('id','treesvg')
-                    .append('g').call(d3.behavior.zoom().scaleExtent([0.5, 8]).on("zoom", zoom)).on("dblclick.zoom", null).append('g');
+                    .append('g');
 
                 base.append('rect').attr('width','3000').attr('height','2000').attr("class", "overlay");
 
@@ -148,7 +153,6 @@ function tree(){
 
                 base.append('g').attr('id','g_circles').selectAll('circle').data(tree.getVertices()).enter()
                         .append('circle').attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;}).attr('r',vRad)
-                        .on('click',function(d){ d3.selectAll("circle").style("fill", "steelblue"); d3.select(this).style("fill", "white"); console.log(this); return clickNode(d); }).transition().duration(500).attr('cx',function(d){ return d.p.x;}).attr('cy',function(d){ return d.p.y;});
 
                 /*
                 base.append('g').attr('id','g_labels').selectAll('text').data(tree.getVertices()).enter().append('text')
@@ -156,12 +160,10 @@ function tree(){
                         .on('click',function(d){return tree.addLeaf(d.v);});	  
                 */              
 
-                //tree.addLeaf(1);
-                //tree.addLeaf(1);
-        }
+                 base.attr("transform", "translate(-5800.502816217603,-364.73674363454006)scale(6.964404506368993)");
 
-        function zoom() {
-          base.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+                //tree.addLeaf(1);
+                //tree.addLeaf(1);
         }
 
       initialize();
@@ -172,45 +174,69 @@ var tree= tree();
 
 tree.fix();
 
-var clickedNode;
-var clickedNodeReal;
+var p0 = [tree.vis.p.x, tree.vis.p.y, 60],
+                p1 = [1000, 100, 60];
 
-function AddNode() {
-    tree.addLeaf(clickedNode);
-    updateInfos(clickedNodeReal);
-}
 
-function DeleteNode() {
-    if(clickedNode == 1) {
-        alert('Vous ne pouvez pas supprimer le premier point !')
-        return
-    }
+var currentNode = 1;
+var currentNodeReal;
+var oldNode;
 
-    tree.deleteLeaf(clickedNode);
-    // TODO CLEAR BOTTOM
-    $("#question").html("");
-    $('#reponses').html("");
-    d3.selectAll("circle").style("fill", "steelblue");
-}
+function transition(svg, start, end) {
+          var center = [2000 / 2, 460 / 2],
+              i = d3.interpolateZoom(start, end);
 
-function clickNode(node) {
-    updateInfos(node);
+          svg
+              .attr("transform", transform(start))
+            .transition()
+              .delay(250)
+              .duration(i.duration * 2)
+              .attrTween("transform", function() { return function(t) { return transform(i(t)); }; })
 
-    // Precise the node to edit
-    clickedNode = node.v;
-    clickedNodeReal = findNodeById(clickedNode);
+          function transform(p) {
+            var k = 460 / p[2];
+            return "translate(" + (center[0] - p[0] * k) + "," + (center[1] - p[1] * k) + ")scale(" + k + ")";
+          }
+        }
+
+
+function changeActiveNode(newNode) {
+    //Actualiser les choix
+    updateInfos(newNode);
+
+    //Faire le zoom
+    p0 = [oldNode.p.x, oldNode.p.y, 60];
+    p1 = [currentNodeReal.p.x, currentNodeReal.p.y, 60];
+    d3.select("g").call(transition,p0,p1);
+
+    //Changer la couleur de la node
+    d3.selectAll("[x2='"+currentNodeReal.p.x+"']").filter("[y2='"+currentNodeReal.p.y+"']").transition().duration(4000).style("stroke", "red");
+    d3.selectAll("[cy='"+currentNodeReal.p.y+"']").filter("[cx='"+currentNodeReal.p.x+"']").transition().duration(5000).style("fill", "white");
+
+    //Vérifier node finale
+    if(currentNodeReal.c.length < 1)
+        $('#reponses').text('Parcours terminé');
 }
 
 function updateInfos(node) {
-    var realNode = findNodeById(node.v);
+    oldNode = currentNodeReal;
+    currentNodeReal = findNodeById(node);
 
-    $("#question").html(realNode.l);
+    $("#question").html(currentNodeReal.l);
 
     $('#reponses').text('');
-    realNode.c.forEach(function(truc, i){
-        $('#reponses').append(i+' - <a href="#" id="'+truc.v+'" data-type="text"  data-name="field'+truc.v+'" title="Definir la réponse" class="editable-click editable-empty">'+truc.r +'</a><br/>');
+    currentNodeReal.c.forEach(function(truc, i){
+        $('#reponses').append('<button class="btn btn-primary" onClick="changeActiveNode($(this).attr(\'id\'))" id="'+truc.v+'">'+truc.r +'</button><br/><br/>');
     });
 }
+
+
+// Initialisation first node
+$(document).ready(function() {
+    updateInfos(currentNode);
+    d3.selectAll("[cy='80']").filter("[cx='960'").style("fill", "white");
+});
+
 
 function findNodeById(id) {
     var nodeToReturn;
@@ -232,6 +258,7 @@ function findNodeById(id) {
 }
 
 
+/*
 $(document).ready(function() {
     $('#question').editable({
         defaultValue: '',
@@ -254,3 +281,4 @@ $(document).ready(function() {
                 }
     });
 });
+*/
