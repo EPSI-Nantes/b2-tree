@@ -240,6 +240,7 @@ $(document).ready(function() {
             clickedNodeReal.l = newValue;
         }
     });
+    $("#question").html("");
 });
 
 
@@ -254,3 +255,4 @@ $(document).ready(function() {
                 }
     });
 });
+

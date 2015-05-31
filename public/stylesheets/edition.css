@@ -24,7 +24,7 @@ line{
 }
 
 #treesvg{
-	border:1px solid grey;
+	border:1px solid rgb(0, 156, 252);
     background-color: #28282b;
     height: 75%;
     width:100%;
@@ -79,36 +79,9 @@ line{
     bottom: 10px;
 }
 
-#menu {
-    width:100px;
-    background-color:#68217a;
-    position:absolute;
-    font-family: Calibri;
-    font-size: 1.1em;
-}
-
-#menu ul {
-    padding:0;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-
-#menu ul li {
-	padding: 2px;
-    list-style:none;
-    color:white;
-    border-bottom: 1px solid #888;
-    text-align:center;
-}
-
-#menu ul li:hover {
-    background-color:#9f66ae;
-    cursor: pointer;
-}
-
 #btn-save {
     position:absolute;
-    right:1;
+    right:1px;
     margin-top: -34px;
     border-radius:0;
 }

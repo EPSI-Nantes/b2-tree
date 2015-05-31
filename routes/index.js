@@ -175,8 +175,11 @@ router.post('/addtree', function(req, res) {
       sql = mysql.format(sql, inserts);
 
       connection.query(sql, function(err, rows, fields) {
-        if(!err)
+        if(!err) {
           console.log('Added default node');
+          res.writeHead(200, {"Content-Type": "application/json"});
+          res.end(JSON.stringify({id: insId , nom: name}));
+        }
         else
           console.log('Error while trying to add default node:', err);
       });

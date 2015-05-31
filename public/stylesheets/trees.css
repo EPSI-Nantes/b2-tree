@@ -1,9 +1,18 @@
+/* 
+    Created on : 16 mars 2015, 09:42:14
+    Author     : Raphaël PARE
+*/
 body {
 	background-color: #28282b !important;
+	padding-left: 50px;
+	padding-right: 50px;
 }
 
 h1 {
 	color:#FFF !important;
+	text-align: center;
+	font-weight: bold !important;
+	font-family: Consolas !important;
 }
 
 .box {

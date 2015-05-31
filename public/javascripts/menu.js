@@ -60,7 +60,16 @@ $(function() {
 	        processData: false,
 	        contentType: "application/json; charset=UTF-8",
 	        success: function(response, code, xhr) {
-	            console.log('success');
+	        	var chain = "<div class='box' id='"+response.id+"'><h3>"+response.nom+"</h3>" +
+				"<button onclick='location.href=\"/parcours/"+response.id+"\"' class='btn btn-primary run'>Parcourir</button><br/>" +
+     			"<button onclick='location.href=\"/edition/"+response.id+"\"' class='btn btn-primary'><span class='glyphicon glyphicon-edit'></span>&nbsp; Modifier</button>" +
+        		"<button onclick='DeleteTree("+response.id+")' class='btn btn-primary'><span class='glyphicon glyphicon-trash'></span></button></div>";
+
+
+	        	$(chain).insertBefore("#add");
+
+	            console.log(response.id);
+	            console.log(response.nom);
 	        },
 	        error: function(jqXHR, textStatus, errorThrown) {
 	            console.log('error ' + textStatus + " " + errorThrown);

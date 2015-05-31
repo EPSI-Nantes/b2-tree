@@ -13,13 +13,13 @@
     <script src="javascripts/menu.js" type="text/javascript"></script>
   </head>
   <body>
-    <h1>[Trees]</h1>
-    <p>Selectionnez</p>
+
+    <h1>[<a href="#"><img src="/images/gsb-logo.png" /></a> TREES]</h1>
      <% trees.forEach(function(tree){ %>
       <div class="box" id="<%= tree.id %>">
-	    <h3><%= tree.name %></h3>
-	    <button onclick="location.href='/parcours/<%= tree.id %>'" class="btn btn-primary run">Parcourir</button><br/>
-     	<button onclick="location.href='/edition/<%= tree.id %>'" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span>&nbsp; Modifier</button>
+  	    <h3><%= tree.name %></h3>
+  	    <button onclick="location.href='/parcours/<%= tree.id %>'" class="btn btn-primary run">Parcourir</button><br/>
+       	<button onclick="location.href='/edition/<%= tree.id %>'" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span>&nbsp; Modifier</button>
         <button onclick="DeleteTree(<%= tree.id %>)" class="btn btn-primary"><span class="glyphicon glyphicon-trash"></span></button>
       </div>
     <% }); %>
