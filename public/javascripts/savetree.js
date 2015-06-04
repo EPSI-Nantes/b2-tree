@@ -5,7 +5,7 @@ function SaveTree() {
     },2000);
 
 $.ajax({
-        url: 'http://localhost:3000/savetree',
+        url: '../savetree',
         data: JSON.stringify({tree: tree.vis, id: sendIdTree}),
         type: 'POST',
         processData: false,

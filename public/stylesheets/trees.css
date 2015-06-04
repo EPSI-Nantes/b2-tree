@@ -13,6 +13,24 @@ h1 {
 	text-align: center;
 	font-weight: bold !important;
 	font-family: Consolas !important;
+	margin-bottom: 50px !important;
+}
+
+table {
+	width:100%;
+}
+
+td {
+	width:33%;
+}
+
+.login-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  margin-left: -50px;
+  color:#FFF;
 }
 
 .box {

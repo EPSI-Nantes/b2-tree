@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var flash = require('connect-flash');
+
+var passport = require('../auth');
 
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
@@ -10,9 +13,36 @@ var connection = mysql.createConnection({
 });
 
 /* GET home page. */
+/*
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+*/
+
+// Middleware to check if auth
+var isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+  res.redirect('/');
+}
+
+
+router.get('/', function login(req, res) {
+  res.render('index', { title: 'Login', message: req.flash('loginMessage') });
+});
+
+
+router.post('/', passport.authenticate('local', {
+  failureRedirect: '/',
+  successRedirect: '/trees',
+  failureFlash: true
+}));
+
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+ });
+
 
 /* GET Hello World page. */
 router.get('/helloworld', function(req, res) {
@@ -20,14 +50,14 @@ router.get('/helloworld', function(req, res) {
 });
 
 /* GET List of trees created */
-router.get('/trees', function(req, res) {
+router.get('/trees', isAuthenticated, function(req, res) {
   connection.query('SELECT * FROM trees', function(err, rows, fields) {
     if (!err) {
       console.log(rows);
-      res.render('trees', {trees: rows});
+      res.render('trees', {trees: rows, name: req.user.username});
     }
     else
-      console.log("Error while retrieving created trees !");
+      console.log("Error while retrieving created trees !", err);
 
   });
 });
@@ -37,7 +67,7 @@ router.get('/edition', function(req, res) {
 });
 
 /* GET Edit a specific tree */
-router.get('/edition/:id', function(req, res) {
+router.get('/edition/:id',isAuthenticated, function(req, res) {
   var id = req.params.id;
   var sql = 'SELECT * FROM node WHERE idTree=?'
   var inserts = [id];
@@ -56,7 +86,7 @@ router.get('/edition/:id', function(req, res) {
 });
 
 /* GET Run a specific tree */
-router.get('/parcours/:id', function(req, res) {
+router.get('/parcours/:id',isAuthenticated, function(req, res) {
   var id = req.params.id;
   var sql = 'SELECT * FROM node WHERE idTree=?'
   var inserts = [id];

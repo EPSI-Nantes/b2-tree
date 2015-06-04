@@ -13,8 +13,21 @@
     <script src="javascripts/menu.js" type="text/javascript"></script>
   </head>
   <body>
-
-    <h1>[<a href="#"><img src="/images/gsb-logo.png" /></a> TREES]</h1>
+    <div id="header">
+      <table>
+        <tr>
+          <td></td>
+          <td><h1>[ ARBRES ]</h1></td>
+          <td class="pull-right "><ul class="nav nav-pills"><li role="presentation" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+      Bienvenue, <b><%= name %></b> <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+    <li><a href="/logout">Deconnexion</a></li>
+    </ul></li></ul>
+        </tr>
+      </table>
+    </div>
      <% trees.forEach(function(tree){ %>
       <div class="box" id="<%= tree.id %>">
   	    <h3><%= tree.name %></h3>
@@ -27,15 +40,21 @@
     	+
     </div>
     <div id="dialog-form" title="Ajouter un arbre">
-	  <form>
-	    <fieldset>
-	      <br/>
-	      <label for="name">Nom</label>
-	      <input type="text" name="name" id="name" value="" class="text ui-widget-content ui-corner-all">
-	      <!-- Allow form submission with keyboard without duplicating the dialog button -->
-	      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-	    </fieldset>
-	  </form>
-	</div>
+  	  <form>
+  	    <fieldset>
+  	      <br/>
+  	      <label for="name">Nom</label>
+  	      <input type="text" name="name" id="name" value="" class="text ui-widget-content ui-corner-all">
+  	      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+  	      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+  	    </fieldset>
+  	  </form>
+  	</div>
+    <footer class="login-footer">
+        <div class="footer-copyright">
+            <div class="pull-right"><a href="http://www.alucara.com/">Raphaël Paré</a></div>
+            Copyright © 2015 <img src="/images/gsb-logo.png" height="20" title="Logo GSB copyright"> | Tous droits réservés
+        </div>
+    </footer>
   </body>
 </html>

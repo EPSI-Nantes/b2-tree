@@ -3,7 +3,7 @@ function DeleteTree(idToDelete) {
 	var send = {id: idToDelete};
 
 	$.ajax({
-        url: 'http://localhost:3000/deletetree',
+        url: 'deletetree',
         data: JSON.stringify(send),
         type: 'POST',
         processData: false,
@@ -54,7 +54,7 @@ $(function() {
 		var send = {name: $("#name").val()};
 
 		$.ajax({
-	        url: 'http://localhost:3000/addtree',
+	        url: 'addtree',
 	        data: JSON.stringify(send),
 	        type: 'POST',
 	        processData: false,
